@@ -3,6 +3,12 @@
  * @var Template_VariableAccessor $VAR
  * @var array $OPT
  */
+/* Reflection class setup */
+$forward = $VAR->domain->forwarding; // get forwarding object
+$reflector = new \ReflectionClass($forward);
+$classProperty = $reflector->getProperty('_data'); // get protected properties
+$classProperty->setAccessible(true); // make them accessible
+$data = $classProperty->getValue($forward); // get array
 ?>
 server {
     listen <?php echo $OPT['ipAddress']->escapedAddress . ':' . $OPT['frontendPort'] .
@@ -54,16 +60,11 @@ server {
 <?php endif ?>
 
     <?php echo $VAR->domain->forwarding->nginxExtensionsConfigs ?>
-
     location / {
 	proxy_http_version 1.1;
 	proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade"; 
-    <?php if ($OPT['ssl']): ?>
-        proxy_pass <?php echo $VAR->domain->forwarding->redirectUrl; ?>;
-    <?php else: ?>
-        proxy_pass <?php echo $VAR->domain->forwarding->redirectUrl; ?>;
-    <?php endif ?>
+        proxy_set_header Connection "upgrade";
+        proxy_pass <?php echo $data["redirect"]; /* Get direct url */?>;
 	proxy_buffering off;
 	client_max_body_size 0;
 	proxy_connect_timeout  3600s;

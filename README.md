@@ -24,7 +24,7 @@ sudo cp ~/nginxForwarding.php /opt/psa/admin/conf/templates/custom/domain/nginxF
 sudo /usr/local/psa/admin/sbin/httpdmng --reconfigure-all
 ```
 6) Configure your domain/subdomain "Hosting Settings" to use frame forwarding
-7) Input your Proxmox web interface address in the "Destination address" field EX: 192.168.1.x:8006/
+7) Input your Proxmox web interface address in the "Destination address" field EX: http://192.168.1.x:8006/
 8) Enable SSL/TLS support and Permanent SEO-safe 301 redirect from HTTP to HTTPS in the "Security" settings
 
 # Removal
